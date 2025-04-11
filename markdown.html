@@ -273,16 +273,164 @@
             sys.exit(app.exec_())<span class="preCode-comment"># Start the application event loop</span>
       </code>
     </pre>
-    <p id="github-ref">
-      For more reference check my repository link: 
-      <a 
-        href="https://github.com/nifty-Hasmet1123/PyQT-tutorial-project" 
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        PyQt Project
-      </a>
-    </p>
+      <pre>
+      <h5 style="margin-bottom: 0; padding: 0;">Class based (Calculator App Reference):</h5>
+      <code>
+        from PySide6.QtCore import Qt
+        from PySide6.QtWidgets import (
+            QApplication,
+            QWidget,
+            QVBoxLayout,
+            QHBoxLayout,
+            QLabel,
+            QPushButton,
+            QGridLayout,
+            QLineEdit
+        )
+        from enum import Enum
+        import sys
+        
+        <span class="preCode-comment"># List of buttons</span>
+        class Buttons(Enum):
+            LIST_OF_BUTTON = list(r"789/456*123-0.=+")
+
+        class Calculator(QWidget):
+            def __init__(self):
+                super().__init__()
+                <span class="preCode-comment"># Layouts</span>
+                self.master_layout = QVBoxLayout()
+                self.master_grid = QGridLayout()
+                self.clear_and_delete_layout = QHBoxLayout()
+                self.text_box_field = QHBoxLayout()
+                
+                <span class="preCode-comment"># Widgets UI Elements</span>  
+                self.text_box = QLineEdit()
+                self.clear_button = QPushButton("C")
+                self.delete_button = QPushButton("<")
+
+                <span class="preCode-comment"># Window configuration</span>
+                self.setWindowTitle("Calculator by Maximo Ignacio")
+                self.resize(250, 300)
+
+                <span class="preCode-comment"># Add widgets and add object names</span> 
+                self.add_widgets()
+                self.add_object_names()
+
+                <span class="preCode-comment"># Designs</span> 
+                self.add_styles()
+
+                <span class="preCode-comment"># Add functionalities</span> 
+                self.add_functions()
+
+                <span class="preCode-comment"># Adding to layouts to masters</span> 
+                self.master_layout.addLayout(self.text_box_field)
+                self.master_layout.addLayout(self.master_grid)
+                self.master_layout.addLayout(self.clear_and_delete_layout)
+
+                <span class="preCode-comment"># Add the final layout</span> 
+                self.setLayout(self.master_layout)
+
+            def add_widgets(self):
+                self.text_box_field.addWidget(self.text_box)
+                self.clear_and_delete_layout.addWidget(self.clear_button)
+                self.clear_and_delete_layout.addWidget(self.delete_button)
+            
+            def add_object_names(self):
+                self.clear_button.setObjectName("clear_button")
+                self.delete_button.setObjectName("delete_button")
+            
+            def add_styles(self):
+                self.clear_button.setStyleSheet("""
+                    #clear_button {
+                        padding: 10px;
+                        max-width: 400px
+                    }
+                """)
+                
+                self.delete_button.setStyleSheet("""
+                    #delete_button {
+                        padding: 10px;
+                        max-width: 400px
+                    }
+                """)
+            
+            <span class="preCode-comment"># Overrides the closeEvent method from the QWidget class</span> 
+            def closeEvent(self, event):
+                print("Calculator has been closed.")
+                event.accept()
+                
+            def add_functions(self):
+                <span class="preCode-comment"># For delete button function</span> 
+                self.delete_button.clicked.connect(self._delete_button_func)
+                <span class="preCode-comment"># For clearing the field</span> 
+                self.clear_button.clicked.connect(lambda: self.text_box.clear())
+                <span class="preCode-comment"># For adding an event trigger function to the grid buttons</span> 
+                self._button_creation()
+
+            def _delete_button_func(self):
+                current_text = self.text_box.text()
+
+                if len(current_text) > 1:
+                    sliced_text = current_text[:-1] # exclusive at the end
+                    self.text_box.setText(sliced_text)
+                elif len(current_text) <= 1:
+                    self.text_box.clear()
+
+            def _button_clicked(self, sender: QPushButton):
+                text = sender.text()
+
+                if text == "=":
+                    try:
+                        expression = self.text_box.text()
+                        res = eval(expression, {"__builtins__": None}, {})
+                    except ZeroDivisionError as e:
+                        self.text_box.setText("Zero Division Error")
+                        raise ValueError(f"Expression: '{expression}' is not valid.") from e
+                    else:
+                        self.text_box.setText(str(res))
+                elif sender.objectName() == "clear_button":
+                    self.text_box.setText("")
+                else:
+                    self.text_box.setText(self.text_box.text() + text)
+
+              def _button_creation(self):
+                  row, col = 0, 0
+
+                  for character in Buttons.LIST_OF_BUTTON.value:
+                      button = QPushButton(character)
+                      button.clicked.connect(lambda b=button, *args: self._button_clicked(b))
+                      
+                      <span class="preCode-comment"># Add every widget to the grid layout</span> 
+                      self.master_grid.addWidget(button, row, col)
+
+                      col += 1
+
+                      if col > 3:
+                        col = 0
+                        row += 1
+
+      if __name__ == "__main__":
+          print("Opening Calculator Application...")
+          try:
+              app = QApplication(sys.argv)
+              main_window = Calculator()
+              main_window.show()
+              sys.exit(app.exec())
+          except Exception as e:
+              print("Error:", e)
+
+            
+      </code>
+      <code>
+
+      </code>
+    </pre>
+      <p id="github-ref">
+        For more reference check my repository link:
+        <a href="https://github.com/nifty-Hasmet1123/PyQT-tutorial-project" target="_blank" rel="noopener noreferrer">
+          PyQt Project
+        </a>
+      </p>
     </section>
     <section class="working-with-layouts">
       <h3 class="heading">Working with layouts</h3>
