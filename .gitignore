@@ -10,3 +10,7 @@
 
 # Ignore all __pycache__ folders
 **/__pycache__/
+
+# Ignore build and dist folders in any subdirectory
+**/build/
+**/dist/
