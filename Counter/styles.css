@@ -1,0 +1,51 @@
+p {
+  margin: 0.5px;
+  padding: 0.5px;
+}
+
+.heading {
+  color: green
+}
+
+._pf {
+  font-weight: bold;
+}
+
+._pf::after {
+  content: " -";
+  font-weight: normal;
+}
+
+span.sp-bold {
+  font-weight: bold;
+}
+
+.IPPYQT {
+  width: 60%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+table.IPPYQT caption {
+  caption-side: top;
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+table.IPPYQT th,
+table.IPPYQT td {
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  text-align: left;
+  /* vertical-align: top; */
+}
+
+table.IPPYQT td,
+.IPPYQT>thead th {
+  text-align: center;
+}
+
+.preCode-comment {
+  color: green;
+}

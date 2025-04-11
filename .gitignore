@@ -1,0 +1,12 @@
+# Ignore all .vscode folders in any subdirectory
+**/.vscode/
+
+# Ignore all .logs folders in any subdirectory
+**/.logs/
+
+# Ignore all .env files and folders
+**/.env
+**/.env/
+
+# Ignore all __pycache__ folders
+**/__pycache__/

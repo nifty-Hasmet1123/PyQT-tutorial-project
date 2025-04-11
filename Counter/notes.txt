@@ -1,0 +1,27 @@
+PYQT FRAMEWORK:
+
+PyQT is a class based application
+
+
+Core App Structure
+1. Template Setup with Imports
+2. Creating App Widgets
+3. Adding Functionalities
+5. Designing the layout and GUI
+
+PYQT Widgets
+1. Overview of pyQT5 Widgets
+2. Creating custom Widgets
+3. styling widgets using CSS
+4. Using buttons and labels
+
+Course Breakdown:
+1. Understanding how to use PyQT to create application
+2. How to work with layouts and Designs
+3. Working with Widgets to create a GUI
+4. SQL with database in PyQT
+5. Data Visualization with MatplotLib
+6. Styling in Python with CSS
+
+
+WHY DO WE USE PYQT?
