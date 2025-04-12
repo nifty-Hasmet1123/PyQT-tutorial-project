@@ -409,20 +409,15 @@
                         col = 0
                         row += 1
 
-      if __name__ == "__main__":
+        if __name__ == "__main__":
           print("Opening Calculator Application...")
-          try:
-              app = QApplication(sys.argv)
-              main_window = Calculator()
-              main_window.show()
-              sys.exit(app.exec())
-          except Exception as e:
-              print("Error:", e)
-
-            
-      </code>
-      <code>
-
+            try:
+                app = QApplication(sys.argv)
+                main_window = Calculator()
+                main_window.show()
+                sys.exit(app.exec())
+            except Exception as e:
+                print("Error:", e)
       </code>
     </pre>
       <p id="github-ref">
@@ -468,6 +463,156 @@
           <span class="sp-bold">COL = 1</span>
         </blockquote>
         </p>
+      </div>
+    </section>
+    <hr>
+    <section id="pillow-library">
+      <h1 style="color: blue">Pil Library</h1>
+      <div style="margin-bottom: 20px;">
+        <p>
+          <span class="sp-bold">Python Image Library</span> -
+          Allows us to
+          <span class="sp-bold">work with real photos in Python</span>
+        </p>
+        <p>
+          Giving us the ability to edit a photo similar to basic photoshop.
+        </p>
+      </div>
+      <div>
+        <p>
+          ***Notice PIL is similar to PyQt in the aspect that PIL has
+          <span class="sp-bold">many modules within the main module itself.</span><br>
+          We can
+          <span class="sp-bold">only import what we need.</span>
+        </p>
+      </div>
+      <div class="pil-table">
+        <table class="IPPYQT">
+          <thead>
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">ImageFilter</th>
+              <th scope="col">ImageEnhance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                A Class which holds <br>
+                <span class="sp-bold">properties/methods for working with pictures</span><br>
+                as a file
+              </td>
+              <td>
+                A group of
+                <span class="sp-bold">constant</span>
+                <span class="sp-bold">variables for applying</span>
+                <span class="sp-bold">filters</span>
+                and rotation to
+                <br>
+                images
+              </td>
+              <td>
+                Classes that can be used for
+                <span class="sp-bold">Image enhancement,</span><br>
+                such as
+                <span class="sp-bold">Saturation,</span>
+                <span class="sp-bold">Contrast,</span>
+                <br>
+                <span class="sp-bold">Vibrance</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="pil-ctn">
+      <div>
+        <table class="IPPYQT">
+          <caption style="text-align: left;">Some of the Code that we will use:</caption>
+          <thead>
+            <tr>
+              <th>Code Structure</th>
+              <th>What it does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="sp-bold">from PIL import Image, ImageFilter, ImageEnhance/span>
+              </td>
+              <td>
+                Structure to
+                <span>Import the Classes</span>
+                we will use in this app.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <span class="sp-bold">black_white = pic.convert("L")</span>
+              </td>
+              <td>
+                <span class="sp-bold">Converts</span>
+                an image called
+                <span class="sp-bold">pic into a black and white picture,</span>
+                stored in the variable black_white
+              </td>
+            </tr>
+            <tr>
+              <td>
+                sharp = pic.filter(ImageFilter.SHARPEN)
+              </td>
+              <td>
+                <span class="sp-bold">Sharpens an image called pic</span>
+                and stores it in a variable called sharp
+              </td>
+            </tr>
+            <tr>
+              <td>
+                saturation = ImageEnhance.Color(pic).enhance(1.2)
+              </td>
+              <td>
+                <span class="sp-bold">Adds saturation</span>
+                to an image called pic
+                <span class="sp-bold">by 1.2x</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                mirror = pic.transpose(Image.Flip_LEFT_RIGHT) <br>
+                ⚠ Deprecated
+                <br>
+                Use this instead:
+                mirror = ImageOps.flip(picture)
+                <p>
+                  Reference: 
+                  <a 
+                    href="https://note.nkmk.me/en/python-pillow-flip-mirror/" 
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    Python Pillow Flip Mirror.
+                  </a>
+                </p>
+              </td>
+              <td>
+                <span class="sp-bold">Mirrors an image</span>
+                called pic
+              </td>
+            </tr>
+            <tr>
+              <td>
+                edited_picture.save("edit.jpg")
+              </td>
+              <td>
+                The
+                <span class="sp-bold">save</span>
+                method allows us to
+                <span class="sp-bold">save the newly edited photo</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
   </main>

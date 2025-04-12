@@ -1,3 +1,13 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 982px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
 p {
   margin: 0.5px;
   padding: 0.5px;
@@ -21,7 +31,7 @@ span.sp-bold {
 }
 
 .IPPYQT {
-  width: 60%;
+  width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
   font-family: Arial, Helvetica, sans-serif;
@@ -57,4 +67,13 @@ table.IPPYQT td,
 
 #github-ref {
   font-weight: 700;
+}
+
+#pil-ctn {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+code pre {
+  margin-bottom: 0px;
 }
