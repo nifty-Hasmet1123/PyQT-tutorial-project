@@ -10,7 +10,8 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QComboBox,
-    QFileDialog
+    QFileDialog,
+    QMessageBox
 )
 from PySide6.QtGui import QCursor, QPixmap
 from enum import Enum
@@ -25,6 +26,8 @@ class ImageEditorApp(QWidget):
         super().__init__()
         self.setWindowTitle("Image Editor Application")
         self.resize(1080, 720)
+        self.selected_file = None
+        self.file_path_selected = None
 
         # Layouts
         self.master_layout = QVBoxLayout()
@@ -40,6 +43,7 @@ class ImageEditorApp(QWidget):
         self.select_folder_button = QPushButton("Select Folder")
         self.file_list = CustomListWidget() # added modification on pointer
         self.picture_box = QLabel("Image will appear here.")
+        self.info_box = QLabel("")
         self.filter_box = QComboBox()
 
         self.btn_left = QPushButton("Left")
@@ -51,12 +55,15 @@ class ImageEditorApp(QWidget):
         self.btn_contrast = QPushButton("Contrast")
         self.btn_blur = QPushButton("Blur")
 
+        # PixMap
+        self.pixmap = QPixmap()
+
         # sample
         # self.select_folder_button.clicked.connect(fn.get_working_directory)
-        self.select_folder_button.clicked.connect(self.get_working_directory)
-
+        # passing the main class(self) to the static method function
+        self.select_folder_button.clicked.connect(lambda: self.get_working_directory(self))
+       
         # Design and add widget
-        self.add_widget_to_list()
         self.add_item_to_combo_box()
 
         # Design left
@@ -76,14 +83,73 @@ class ImageEditorApp(QWidget):
 
         # Set final QWidget layout
         self.setLayout(self.master_layout)
+
+        # set the signal on the emit mousePressEvent
+        # doesn't need to supply with argument
+        # add a connect on the fileSelected class attribute in the CustomListWidget
+        self.file_list.fileSelected.connect(self.on_file_select)
+
+    ### Call this method on_file_select method
+    def display_image_based_on_path(self):
+        # also add this in the 
+        if self.file_path_selected and os.path.exists(self.file_path_selected):
+            # self.file_path_selected = B:/CODES/Python-Related/PYQT-PROJECT/Image-Editing-App/assets
+
+            ### DEBUGGING PURPOSES
+            # QMessageBox.information(self, "Debug info", f"Path: {self.file_path_selected}")
+            # QMessageBox.information(self, "Debug info", f"Path: {self.selected_file}")
+            image_path = os.path.join(self.file_path_selected, self.selected_file)
+            
+            # Load the image into the existing pixmap instance
+            self.pixmap.load(image_path)
+
+            # add scaling to the picture box
+            self.picture_box.setPixmap(self.pixmap)
+
+             
+    def on_file_select(self, file_name):
+        # the file name will come from the CustomListWidget mousePressEvent instance method
+        # print(f"Selected picture was: {file_name}")
+        self.selected_file = file_name
+        # self.picture_box.setText(f"You have selected this file: {self.selected_file}") # now display the image here instead of QLabel
+
+        ### add the widget to the right column if the selected_file change
+        if self.selected_file:
+            # NOTE: you can add a html label on the setText method of QLabel
+            
+            # display the image here after selecting
+            self.display_image_based_on_path()
+
+            # HTML STRING
+            html_string = "You have selected file: <strong>{text}</strong>".format(text=self.selected_file)
+
+            self.info_box.setText(html_string)
+            self.right_layout.insertWidget(0, self.info_box, alignment=Qt.AlignLeft)
     
     # NOTE: better to put this on another file instead 
     # NOTE: CAN ALSO BE USED AS A INSTANCE METHOD BUT IT REALLY SHOULD BE SEPERATE
     # NEXT TASK: AFTER GETTING THE PATH HERE USE OS.LISTDIR() TO LIST ALL FILES AND USE .endswith for every string that ends with .jpg, .png, .jpeg and .bmp
     @staticmethod
-    def get_working_directory():
+    def get_working_directory(cls_instance):
+        """
+        This is a function that should be outside the class because it provides a function not really related to this class but can be used by it.
+        
+        Args:
+            cls_instance = should be an argument of class itself(self) in order for this to work. Do not pass the literal class name because it will not work
+            This will only work if the .add_widget_to_list() has a decorator of @classmethod
+        
+        """
         file_path = QFileDialog.getExistingDirectory()
-        return file_path
+
+        ### add the functionalities here to be displayed in the file list for display
+        
+        # add the file path to tthe current instance of the class
+        cls_instance.file_path_selected = file_path
+
+        # call the function add_widget_to_list to display the files that are selected on the directory only .png, .jpeg, .jpg will be shown
+        cls_instance.add_widget_to_list(file_path)
+        
+        # return file_path
 
     def left_layout_add_widgets(self):
         # adding the widgets to the left layout
@@ -112,15 +178,13 @@ class ImageEditorApp(QWidget):
         self.master_row.addLayout(self.left_layout)
         self.master_row.addLayout(self.right_layout)
 
-    def add_widget_to_list(self):
-        # for item in Constants.ITEMS.value:
-        #     self.file_list.addItem(item)
-        # add the functionalities here after selecting the select_folder using the QTFileDialog
-        # the Editor class here
-
-
-        pass
-
+    def add_widget_to_list(self, path: str):
+        list_of_file = os.listdir(path)
+        
+        for file in list_of_file:
+            if file.endswith(("png", "jpeg", "bmp", "jpg")):
+                self.file_list.addItem(file)
+            
     def add_item_to_combo_box(self):
         for item in Constants.COMBO_BOX.value:
             self.filter_box.addItem(item)
@@ -130,8 +194,14 @@ class ImageEditorApp(QWidget):
         self.file_list.setProperty("class", "left-widget")
         # print(self.file_list.property("class"))
         self.select_folder_button.setObjectName("select-folder")
-        print(self.select_folder_button.objectName())
+        # print(self.select_folder_button.objectName())
         
+        # info box
+        self.info_box.setFixedHeight(20)
+
+        # picture box
+        
+
         self.file_list.setStyleSheet("""
             QListWidget[class='left-widget'] {
                 max-width: 200px;

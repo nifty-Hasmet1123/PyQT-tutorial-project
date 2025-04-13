@@ -74,6 +74,10 @@ table.IPPYQT td,
   padding-bottom: 5px;
 }
 
+.deprecated-warning {
+  color: red;
+}
+
 code pre {
   margin-bottom: 0px;
 }

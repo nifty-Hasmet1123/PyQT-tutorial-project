@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Maximo Ignacio">
   <link rel="stylesheet" href="./styles.css" type="text/css">
   <title>PyQT Notes</title>
 </head>
@@ -580,7 +581,7 @@
             <tr>
               <td>
                 mirror = pic.transpose(Image.Flip_LEFT_RIGHT) <br>
-                ⚠ Deprecated
+                <strong class="deprecated-warning">⚠ Deprecated</strong> 
                 <br>
                 Use this instead:
                 mirror = ImageOps.flip(picture)
@@ -613,6 +614,59 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </section>
+    <section>
+      <h3 class="heading">QTSignals Example</h3>
+      <div>
+        <div>
+          <p>When you <strong>emit</strong> a signal, you are essentially sending out a notification that something has occured. and that notification</p>
+          <p>can be received by other parts of your program that are connected to that signal.</p>
+          <p>The Signal can carry data(like a string, number or object), and other parts of your program (such as slots) can act on that data once</p>
+          <p>the signal is emitted.</p>
+        </div>
+        <div>
+          <h4>Example:</h4>
+          <pre>
+            <code>
+              class CustomListWidget(QListWidget):
+                fileSelected = Signal(str)  # Define a signal that sends a string
+
+                def mousePressEvent(self, event):
+                    item = self.itemAt(event.pos())
+                    if item:
+                        file_name = item.text()  <span class="preCode-comment"># Get the item text (e.g., file name)</span>
+                        self.fileSelected.emit(file_name) <span class="preCode-comment"># Emit the signal with the file name</span>  
+                    super().mousePressEvent(event)
+            </code>
+          </pre>
+          <h4>Now:</h4>
+          <pre>
+            <code>
+              class ImageEditorApp(QWidget):
+                def __init__(self):
+                    super().__init__()
+                    self.setWindowTitle("Image Editor Application")
+                    self.resize(1080, 720)
+                    self.selected_file = None
+
+                    <span class="preCode-comment"># Layouts and widgets...</span> 
+                    self.select_folder_button = QPushButton("Select Folder")
+                    self.file_list = CustomListWidget()  <span class="preCode-comment"># Custom widget with signal</span> 
+                    self.picture_box = QLabel("Image will appear here.")
+                    
+                    <span class="preCode-comment"># Connect the signal from CustomListWidget to the slot</span>
+                    self.file_list.fileSelected.connect(self.on_file_select)
+
+                def on_file_select(self, file_name):
+                    <span class="preCode-comment"># This method is the slot that gets triggered when the signal is emitted</span> 
+                    self.selected_file = file_name
+                    <span class="preCode-comment"># ✨QLabel can you use inline html tags</span>
+                    self.picture_box.setText(f"You have selected this file: &lt;strong&gt;{self.selected_file}&lt;/strong&gt;")
+                    print(f"File selected: {self.selected_file}")
+            </code>
+          </pre>
+        </div>
       </div>
     </section>
   </main>
