@@ -7,8 +7,8 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QComboBox,
-    QListWidget,
-    QMessageBox
+    # QListWidget,
+    # QMessageBox
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
