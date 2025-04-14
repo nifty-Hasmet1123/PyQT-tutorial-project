@@ -30,17 +30,21 @@ def image_editor():
         
         # Blurry
         blur = picture.filter(ImageFilter.BLUR)
-        blur.save(os_path_join(assets_path, "blurred.jpg"))
+        # blur.save(os_path_join(assets_path, "blurred.jpg"))
         
         # Image Enhancement
         constrast = ImageEnhance.Contrast(picture)
         constrast = constrast.enhance(2.5)
-        constrast.save(os_path_join(assets_path, "contrast.jpg"))
+        # constrast.save(os_path_join(assets_path, "contrast.jpg"))
 
 
         # Color
         color = ImageEnhance.Color(picture).enhance(2.5)
         color.save(os_path_join(assets_path, "color.jpg"))
+
+        # rotate
+        left = picture.transpose(Image.ROTATE_90)
+        left.show()
 
 # image_editor() 
 
