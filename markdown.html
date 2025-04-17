@@ -669,7 +669,78 @@
         </div>
       </div>
     </section>
+    <section>
+      <h3 class="heading">SQL Setup In PyQt</h3>
+      <div>
+        <h4>We want to create a connection with a Postgres Database</h4>
+        <p>database = QSqlDatabase.addDatabase("QPSQL")</p>
+        <p>database.setDatabaseName("your_db_name")</p>
+        <p>db.setUserName("your_username");</p>
+        <p>db.setPassword("your_password");</p>
+
+        <pre>
+          <code>
+            from PyQt5.QtSql import QSqlDatabase
+            <span class="preCode-comment"># or from PySide2.QtSql import QSqlDatabase</span> 
+
+            db = QSqlDatabase.addDatabase("QPSQL")
+            db.setHostName("localhost")
+            db.setDatabaseName("your_db_name")
+            db.setUserName("your_username")
+            db.setPassword("your_password")
+
+            if db.open():
+                print("Connected to PostgreSQL!")
+            else:
+                print("Connection failed:", db.lastError().text())
+
+          </code>
+        </pre>
+      </div>
+
+      <div>
+        <table class="IPPYQT">
+          <thead id="sql-thead">
+            <tr>
+              <th>QTSQL Class Methods</th>
+              <th>What they do</th>
+            </tr>
+          </thead>
+          <tbody id="sql-tbody">
+            <tr>
+              <td>.addDatabase()</td>
+              
+            </tr>
+            <tr>
+              <td>.setDatabaseName()</td>
+              
+            </tr>
+            <tr>
+              <td>.open()</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h4>QMessageBox</h4>
+        <p>Sample snippets:</p>
+        <pre>
+          <code>
+            QMessagebox.question("Delete", "Are you sure you want to delete this expense", QMessageBox.Yes|QMessageBox.No)
+
+            ✨ if inside the class
+            QMessagebox.question(self, "Delete", "Are you sure you want to delete this expense", QMessageBox.Yes|QMessageBox.No)
+            
+            QMessageBox.warning("None Selected", "Please select an expense to delete")
+
+            QMessageBox.critical(None, "Critical Error", "Could not open database")
+
+          </code>
+        </pre>
+      </div>
+    </section>
   </main>
+  <script defer src="./script.js"></script>
 </body>
 
 </html>
