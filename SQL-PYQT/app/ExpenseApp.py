@@ -11,11 +11,19 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QMessageBox
 )
+from PySide6.QtCore import QDate
 
 # query the details here as well NOTE: should be seperated
 from config.db import engine
 from config.models import ExpenseModel
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import insert
+from sqlalchemy.exc import SQLAlchemyError
+from textwrap import dedent
+
+class ErrorOccurred(BaseException):
+    def __init__(self, *args):
+        super().__init__(*args)
 
 class ExpenseApp(QWidget):
     # created a SESSION HERE
@@ -65,12 +73,17 @@ class ExpenseApp(QWidget):
 
         # EVENTS
         self.add_button.clicked.connect(self.add_expense)
+        self.delete_button.clicked.connect(self.delete_expense)
 
         # final layout
         self.setLayout(self.master_layout)
 
     def row1_widget(self):
         self.row1.addWidget(QLabel("Date:"))
+        
+        # modifying the date box to be set to date of current day
+        self.date_box.setDate(QDate.currentDate())
+        
         self.row1.addWidget(self.date_box)
         self.row1.addWidget(QLabel("Category:"))
 
@@ -109,10 +122,104 @@ class ExpenseApp(QWidget):
             QMessageBox.Yes | QMessageBox.No
         )
 
-        if confirm_box == "Yes":
-            print(True)
+        if confirm_box == QMessageBox.Yes:
+            # if using the with context manager no need to explicitly tell the session to rollback if there are errors.
+            try:
+                with self.Session() as session:
+                    # NOTE: this should be separated class
+                    # insert the data here
+                    # NOTE: using the insert syntax will bypass the validations
+                    # stmt = insert(ExpenseModel).values(
+                    #     category=None,
+                    #     amount=float(amount),
+                    #     description=description
+                    # )
+                    # print(f"Normal statement: {stmt}")
+                    # print(f"Compiled statement: {stmt.compile().params}")
+                    stmt = ExpenseModel(
+                        category=category,
+                        amount=amount,
+                        description=description
+                    )
+
+                    session.add(stmt)
+                    session.commit()
+            except (SQLAlchemyError, AssertionError) as e:
+                QMessageBox.critical(self, "Error", f"{e}")
+
+                raise ErrorOccurred("CRITICAL ERROR") from e
+            else:
+                print("Execution processed is finished.")
+                self.dropdown.setCurrentIndex(0)
+                self.amount.clear()
+                self.description.clear()
+                self.date_box.setDate(QDate.currentDate())
+                # load the table again after
+                self.load_table()
+
         else:
-            print(False)
+            QMessageBox.information(self, "Information", "Transaction has been cancelled.")
+
+    def delete_expense(self):
+        current_row_selected = self.table.currentRow() # the current row that was selected in the UI
+        
+        # count = self.table.columnCount()
+        # test = self.table.horizontalHeaderItem(0)
+        # name = self.table.horizontalHeaderItem(0).text()
+        # print(test)
+        # print(name)
+        # print(self.table.item(2, 4).text())
+
+        # meaning there is no selected row
+        if current_row_selected == -1:
+            QMessageBox.information(self, "Information", "Please select a row in the table for deletion.")
+        else:
+            values = {}
+            count = self.table.columnCount()
+            
+            for column_index in range(count): # row
+                header = self.table.horizontalHeaderItem(column_index)
+                # print(header.text())
+                data_for_each_column_in_selected_row = self.table.item(current_row_selected, column_index) 
+                
+                values.setdefault(
+                    header.text(),
+                    data_for_each_column_in_selected_row.text()
+                )
+
+            message = f"""
+                Are you sure you want to delete this?\n
+                ID: {values["Id"]}
+                Date: {values["date"]}
+                Category: {values["category"]}
+                Amount: {values["amount"]}
+                Description: {values["description"]}
+            """
+           
+            confirm_box = QMessageBox.question(
+                self, 
+                "Confirm Delete", 
+                dedent(message),
+                QMessageBox.Yes | QMessageBox.No
+            )
+
+            if confirm_box == QMessageBox.Yes:
+                # create an sql here
+                with self.Session() as session:
+                    id_target = values["Id"]
+                    stmt = session.query(ExpenseModel).filter_by(id=id_target).first()
+                    # print(stmt.__dict__)
+
+                    if stmt:
+                        session.delete(stmt)
+                        session.commit()
+
+                        print("values are now deleted on the database.")
+
+                        # load the table again to render the new information.
+                        self.load_table()
+            else:
+                QMessageBox.information(self, "Information", "Transaction has been cancelled.")
 
     def load_table(self):
         self.table.setRowCount(0)
