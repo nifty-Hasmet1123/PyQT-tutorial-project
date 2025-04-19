@@ -739,6 +739,72 @@
         </pre>
       </div>
     </section>
+    <section>
+      <h3 class="heading">QMainWindow Sample Code With QWidgets</h3>
+      <pre>
+        <code>
+          from PyQt5.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QApplication
+
+          class MainWindow(QMainWindow):
+              def __init__(self):
+                  super().__init__()
+
+                  left_widget = QWidget()
+                  right_widget = QWidget()
+
+                  <span class="preCode-comment"># Create a container widget</span> 
+                  container = QWidget()
+
+                  <span class="preCode-comment"># Create a horizontal layout</span> 
+                  layout = QHBoxLayout()
+                  layout.addWidget(left_widget)   <span class="preCode-comment"># Left side</span> 
+                  layout.addWidget(right_widget) <span class="preCode-comment"># Right side</span> 
+
+                  container.setLayout(layout)
+
+                  <span class="preCode-comment"># Set the container as the central widget</span> 
+                  self.setCentralWidget(container)
+
+          if _name_ == "_main_":
+              app = QApplication([])
+              window = MainWindow()
+              window.show()
+              app.exec_()
+        </code>
+      </pre>
+    </section>
+    <section>
+      <h3 class="heading">MatPlotLib</h3>
+      <h4>Data Visualization</h4>
+      <div>
+        <p>One of the most powerfuls Python tools, MatPlotLib</p>
+        <p>
+          We will use this create 
+          <span class="sp-bold">simple plots</span>,
+          line
+          <span class="sp-bold">graphs</span>
+          and/or scatter graphs.
+        </p>
+      </div>
+      <div>
+        <table class="IPPYQT">
+          <thead>
+            <tr>
+              <th>MatPlotLib Methods</th>
+              <th>What it does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="plt-body-tr"></tr>
+            <tr class="plt-body-tr"></tr>
+            <tr class="plt-body-tr"></tr>
+            <tr class="plt-body-tr"></tr>
+            <tr class="plt-body-tr"></tr>
+            <tr class="plt-body-tr"></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
   <script defer src="./script.js"></script>
 </body>
