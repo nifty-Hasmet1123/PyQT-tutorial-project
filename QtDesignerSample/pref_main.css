@@ -1,0 +1,5 @@
+
+/* REMEMBER THIS HAS LIMITATION QT CANNOT READ ALL CSS PROPERTIES */
+QLineEdit {
+    color: blue;
+}

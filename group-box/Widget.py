@@ -1,7 +1,6 @@
 from PySide6.QtWidgets import QCheckBox, QGroupBox, QHBoxLayout, QVBoxLayout, QWidget, QSizePolicy, QButtonGroup, QRadioButton
 from PySide6.QtCore import Qt, Slot
 
-
 class Widget(QWidget):
     def __init__(self):
         super().__init__()
